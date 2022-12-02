@@ -52,13 +52,13 @@
                             {% if orderproduct.status == 'New' %}
                             {% comment %} <td><a href="{%  url 'cancel_order' orderproduct.id %}" onclick="return confirm('Are you sure you want to cancel this order?')"class="btn btn-sm btn-outline-danger" >Cancel</a></td> {% endcomment %}
                             {% elif orderproduct.status == 'Cancelled'  %}
-                            {% comment %} <td><button class="btn btn-sm btn-warning" disabled>Cancelled</button></td> {% endcomment %}
+                            <td><button class="btn btn-sm btn-warning" disabled>Cancelled</button></td>
                             {% elif orderproduct.status == 'Placed'%}
-                            <td><a href="{%  url 'cancel_order' orderproduct.id %}" class="btn btn-sm btn-outline-primary">Placed</a>
+                            {% comment %} <td><a href="{%  url 'cancel_order' orderproduct.id %}" class="btn btn-sm btn-outline-primary">Placed</a> {% endcomment %}
                             {% elif orderproduct.status == 'Shipped'%}
-                            <td><a href="{%  url 'cancel_order' orderproduct.id %}" class="btn btn-sm btn-outline-info">Shipped</a>
+                            {% comment %} <td><a href="{%  url 'cancel_order' orderproduct.id %}" class="btn btn-sm btn-outline-info">Shipped</a> {% endcomment %}
                             {% elif orderproduct.status == 'Accepted'%}
-                            <td><a href="{%  url 'cancel_order' orderproduct.id %}" class="btn btn-sm btn-outline-dark">Accepted</a>
+                            {% comment %} <td><a href="{%  url 'cancel_order' orderproduct.id %}" class="btn btn-sm btn-outline-dark">Accepted</a> {% endcomment %}
                             {% elif orderproduct.status == 'Delivered'%}
                             <td><button class="btn btn-sm btn-success" disabled>Delivered</button>
                             {% endif %}

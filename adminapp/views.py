@@ -182,7 +182,7 @@ def addproduct(request):
 
         if form.is_valid():
             form.save()
-            return redirect("productlists")
+            return redirect("productlist")
 
     context = {"form": form}
     return render(request, "adminapp/productadd.html", context)
@@ -198,7 +198,7 @@ def addproductgallery(request):
 
         if form.is_valid():
             form.save()
-            return redirect("productlists")
+            return redirect("productlist")
 
     context = {"form": form}
     return render(request, "adminapp/addproductgallery.html", context)
@@ -218,7 +218,7 @@ def editProduct(request, product_id):
             except:
                 context = {"form": form}
                 return render(request, "adminapp/editproduct.html", context)
-            return redirect("productlists")
+            return redirect("productlist")
 
     context = {"form": form}
     return render(request, "adminapp/editproduct.html", context)
@@ -231,7 +231,7 @@ def deleteproduct(request, product_id):
     dlt = Product.objects.get(pk=product_id)
     dlt.delete()
     messages.success(request,"Product Has been deleted")
-    return redirect("productlists")
+    return redirect("productlist")
 
 
 # Display all Variations

@@ -1,19 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'adminapp/admin_base.html' %}
 {% load static %}
 
 {% block content %}
 
 
-<div class="container" style="margin-top: 50px;">
-    
-    <h2 class="text-center">Payment Successful</h2>
-	<br>
-	<div class="text-center">
-		<a href="{% url 'store' %}" class="btn btn-success">Shop more</a>
-	</div>
-</div>
-
-<div class="container" style="margin: 0 auto;width: 50%;padding: 50px;background: #f1f1f1;margin-top: 50px;margin-bottom: 50px;">
+<div class="container">
+    <div class="card mt-5 mb-5 shadow p-3 rounded">
+        <div class="card-body">
     <div class="row invoice row-printable">
         <div class="col-md-12">
             <!-- col-lg-12 start here -->
@@ -24,7 +17,7 @@
                         <!-- Start .row -->
                         <div class="col-lg-6">
                             <!-- col-lg-6 start here -->
-            
+                            <!-- <img class="logo" src="{%static './images/ck-logo-3.png'%}"> -->
                         </div>
                         <!-- col-lg-6 end here -->
                         <div class="col-lg-6">
@@ -45,10 +38,10 @@
                             <div class="invoice-details mt25">
                                 <div class="well">
                                     <ul class="list-unstyled mb0">
-                                        <li><strong>Order</strong> #{{order_number}}</li>
-                                        <li><strong>Transaction ID</strong> {{transID}}</li>
+                                        <li><strong>Order</strong> #{{order.order_number}}</li>
+                                        <li><strong>Transaction ID</strong> {{order.payment.payment_id}}</li>
                                         <li><strong>Order Date:</strong> {{order.created_at}}</li>
-                                        <li><strong>Status:</strong> {{payment.status}}</li>
+                                        <li><strong>Status:</strong> {{order.payment.status}}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -64,26 +57,26 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                          {% for item in ordered_products %}
+                                          {% for item in order_detail %}
                                             <tr>
                                                 <td>{{item.product.product_name}}
                                                   <p class="text-muted small">
                                           					{% if item.variations.all %}
                                           						{% for i in item.variations.all %}
-                                          							{{ i.variation_category | capfirst }} : {{ i.variation_value | capfirst }} <br>
+                                          							{{ i.variation_category | capfirst }} : {{ i.color_name | capfirst }} <br>
                                           						{% endfor %}
                                           					{% endif %}
                                           				</p>
                                                 </td>
                                                 <td class="text-center">{{item.quantity}}</td>
-                                                <td class="text-center">₹ {{item.product_price}} </td>
+                                                <td class="text-center">₹ {{item.product_price}}</td>
                                             </tr>
                                           {% endfor %}
                                         </tbody>
                                         <tfoot>
                                             <tr>
                                                 <th colspan="2" class="text-right">Sub Total:</th>
-                                                <th class="text-center">₹ {{subtotal}} </th>
+                                                <th class="text-center">₹ {{subtotal}}</th>
                                             </tr>
                                             <tr>
                                                 <th colspan="2" class="text-right">GST:</th>
@@ -92,15 +85,13 @@
 
                                             <tr>
                                                 <th colspan="2" class="text-right">Grand Total:</th>
-                                                <th class="text-center">₹ {{order.order_total}} </th>
+                                                <th class="text-center">₹ {{order.order_total}}</th>
                                             </tr>
                                         </tfoot>
                                     </table>
                                 </div>
                             </div>
-                            <div class="invoice-footer mt25">
-                                <p class="text-center">Thank you for shopping with us!</p>
-                            </div>
+                            
                         </div>
                         <!-- col-lg-12 end here -->
                     </div>
@@ -110,6 +101,8 @@
             <!-- End .panel -->
         </div>
         <!-- col-lg-12 end here -->
+    </div>
+    </div>
     </div>
     </div>
 

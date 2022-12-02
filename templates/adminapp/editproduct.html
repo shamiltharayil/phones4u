@@ -1,6 +1,6 @@
 {% extends 'adminapp/admin_base.html' %}
-{% comment %} {% load crispy_forms_tags %} {% endcomment %}
-{% comment %} {% load crispy_forms_filters %} {% endcomment %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %} 
 {% load static%}
 
 {% block content %}
@@ -21,7 +21,7 @@
                     {%csrf_token%}
                     
                   <div class="mainform">
-                    {% comment %} {{ form | crispy }} {% endcomment %}
+                     {{ form | crispy }} 
                     <!-- {% for msg in messages %}
                     <h6 style="color:red; font-size: small;">{{msg}}</h6>
                     {%endfor%} -->

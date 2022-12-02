@@ -19,6 +19,13 @@ from carts.views import _cart_id
 from carts.models import Cart
 from store.models import Product
 from orders.models import Order, OrderProduct
+
+# Razorpay
+import razorpay
+from django.conf import settings
+from orders.models import Payment
+
+
 # Create your views here.
 def register(request):
     if request.method == 'POST': 
@@ -280,3 +287,80 @@ def userdashboard(request):
         'userprofile': userprofile,
     }
     return render(request, 'accounts/userdashboard.html', context)
+
+def cancel_order(request,pk):
+    product = OrderProduct.objects.get(pk=pk)
+    
+    messages.success(request,"Order has been cancelled and refund initiated")
+    
+    payment_id = product.payment.id
+
+    orders = Order.objects.get(user=request.user,payment_id=payment_id)
+
+    payment = product.payment
+
+
+    if str(payment).__contains__("pay"):
+        
+        paymentId = payment
+        amount = int(product.order_total)
+        refund_amount = int(amount*100)
+        
+        client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+        
+        client.payment.refund(paymentId,{
+            "amount": refund_amount,
+            "speed": "optimum",
+        })
+        product = OrderProduct.objects.get(pk=pk)
+        product.status = 'Cancelled'
+        product.order_total = 0
+        product.save()
+    
+        item = Product.objects.get(pk=product.product.id)
+        item.stock += product.quantity
+        item.save()
+
+    else:
+        product = OrderProduct.objects.get(pk=pk)
+        product.status = 'Cancelled'
+        product.order_total = 0
+        product.save()
+    
+        item = Product.objects.get(pk=product.product.id)
+        item.stock += product.quantity
+        item.save()
+
+    
+    # mail_subject = 'Order Cancellation'
+    # message = render_to_string('orders/order_cancelled_email.html', {
+    #     'user': request.user,
+    #     'order': order,
+    # })
+    # to_email = request.user.email
+    # send_email = EmailMessage(mail_subject, message, to=[to_email])
+    # send_email.send()
+
+    return redirect('my_orders')
+# User Dashboard - My Orders
+@login_required(login_url="usersignin")
+def order_detail(request, order_id):
+    order_detail = OrderProduct.objects.filter(
+        order__order_number=order_id
+    )  # with the '__' we can access foreign key objects
+    order = Order.objects.get(order_number=order_id)
+    subtotal = 0
+
+    for i in order_detail:
+        subtotal = subtotal + i.product_price * i.quantity
+
+    
+
+    context = {
+        "order_detail": order_detail,
+        "order": order,
+        "subtotal": subtotal,
+        
+    }
+
+    return render(request, "accounts/order_detail.html", context)    
